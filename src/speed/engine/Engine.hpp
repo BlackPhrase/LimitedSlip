@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-
 class cGraphics;
 class cInput;
 class cSound;
@@ -9,13 +7,18 @@ class cSound;
 class cEngine
 {
 public:
+	cEngine(int argc, char **argv, cGraphics *apGraphics, cInput *apInput, cSound *apSound);
+	
 	void Init();
 	
-	cGraphics *GetGraphics() const {return mpGraphics.get();}
-	cInput *GetInput() const {return mpInput.get();}
-	cSound *GetSound() const {return mpSound.get();}
+	cGraphics *GetGraphics() const {return mpGraphics;}
+	cInput *GetInput() const {return mpInput;}
+	cSound *GetSound() const {return mpSound;}
 private:
-	std::unique_ptr<cGraphics> mpGraphics;
-	std::unique_ptr<cInput> mpInput;
-	std::unique_ptr<cSound> mpSound;
+	int mnArgCount{0};
+	char **msArgValue{nullptr};
+	
+	cGraphics *mpGraphics{nullptr};
+	cInput *mpInput{nullptr};
+	cSound *mpSound{nullptr};
 };

@@ -1,6 +1,9 @@
 #include <stdexcept>
 
 #include "Graphics.hpp"
+#include "GraphicsImpl.hpp"
+
+cGraphics::cGraphics(iGraphicsImpl *apImpl) : mpImpl(apImpl){}
 
 cGraphics::~cGraphics()
 {
@@ -10,8 +13,10 @@ cGraphics::~cGraphics()
 	SDL_DestroyWindow(mpWindow);
 };
 
-void cGraphics::Init()
+void cGraphics::Init(const wchar_t *asWindowTitle, int anWindowWidth, int anWindowHeight, bool abFullScreen)
 {
+	mpImpl->Init(asWindowTitle, anWindowWidth, anWindowHeight, abFullScreen);
+	
 	if(!TTF_Init())
 	{
 		//std::cout << "SDL2_ttf initialization failed! (" << TTF_GetError() << ")" << std::endl;
@@ -19,16 +24,12 @@ void cGraphics::Init()
 		//TTF_Quit();
 	};
 	
-	int nWindowWidth{1280};
-	int nWindowHeight{600};
-	bool bWindowFullScreen{false};
-	
 	int nWindowFlags{SDL_WINDOW_SHOWN};
 	
-	if(bWindowFullScreen)
+	if(abFullScreen)
 		nWindowFlags |= SDL_WINDOW_FULLSCREEN;
 	
-	mpWindow = SDL_CreateWindow("LimitedSlip", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, nWindowWidth, nWindowHeight, nWindowFlags);
+	mpWindow = SDL_CreateWindow("LimitedSlip", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, anWindowWidth, anWindowHeight, nWindowFlags);
 	
 	if(!mpWindow)
 	{
